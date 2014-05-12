@@ -1,6 +1,6 @@
-var m = angular.module("routeUrls", []);
+angular.module("routeUrls", [])
 
-m.factory("urls", function($route) {
+.factory("urls", function($route) {
 
     var pathsByName = {};
     angular.forEach($route.routes, function (route, path) {
