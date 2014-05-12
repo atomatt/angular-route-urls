@@ -1,0 +1,25 @@
+{
+  "name": "angular-route-urls",
+  "version": "0.1",
+  "authors": [
+    "Matt Goodall"
+  ],
+  "description": "https://github.com/emgee/angular-route-urls",
+  "main": "route-urls.js",
+  "keywords": [
+    "route",
+    "AngularJS"
+  ],
+  "license": "MIT",
+  "homepage": "hhttps://github.com/emgee/angular-route-urls",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+  }
+}
