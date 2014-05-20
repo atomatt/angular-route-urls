@@ -9,10 +9,17 @@ m.factory("urls", function($route) {
         }
     });
 
+    var regexs = {};
+
     var path = function (name, params) {
         var url = pathsByName[name] || "/";
         angular.forEach(params || {}, function (value, key) {
-            url = url.replace(new RegExp(":" + key + "(?=/|$)"), value);
+            var regex = regexs[key];
+
+            if (regex === undefined) {
+              regex = regexs[key] = new RegExp(":" + key + "(/|$)");
+            }
+            url = url.replace(regex, value);
         });
         return url;
     };
