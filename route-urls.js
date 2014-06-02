@@ -17,7 +17,7 @@ m.factory("urls", function($route) {
             var regex = regexs[key];
 
             if (regex === undefined) {
-              regex = regexs[key] = new RegExp(":" + key + "(/|$)");
+              regex = regexs[key] = new RegExp(":" + key + "(?=/|$)");
             }
             url = url.replace(regex, value);
         });
