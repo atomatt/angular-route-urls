@@ -1,6 +1,15 @@
 angular.module("routeUrls", [])
 
 .provider("urls", function($locationProvider) {
+
+    // Create a regex to match a named group in a route URL.
+    var makeNamedGroupRegex = function(inner) {
+        return new RegExp(":" + inner + "(?=/|$)");
+    };
+
+    // Regex that matches any named group.
+    var anyNamedGroup = makeNamedGroupRegex(".*?");
+
     return {
         $get: function($route) {
 
@@ -19,13 +28,20 @@ angular.module("routeUrls", [])
             // params.
             var path = function (name, params) {
                 var url = pathsByName[name] || "/";
-                angular.forEach(params || {}, function (value, key) {
-                    var regex = regexs[key];
-                    if (regex === undefined) {
-                        regex = regexs[key] = new RegExp(":" + key + "(?=/|$)");
-                    }
-                    url = url.replace(regex, value);
-                });
+                if (angular.isObject(params)) {
+                    angular.forEach(params || {}, function (value, key) {
+                        var regex = regexs[key];
+                        if (regex === undefined) {
+                            regex = regexs[key] = makeNamedGroupRegex(key);
+                        }
+                        url = url.replace(regex, value);
+                    });
+                } else {
+                    params = Array.prototype.slice.call(arguments, 1);
+                    angular.forEach(params, function(param) {
+                        url = url.replace(anyNamedGroup, param);
+                    });
+                }
                 return url;
             };
 
@@ -36,10 +52,11 @@ angular.module("routeUrls", [])
             return {
                 path: path,
                 href: function (name, params) {
+                    var url = path.apply(this, arguments);
                     if (html5Mode) {
-                        return path(name, params);
+                        return url;
                     }
-                    return "#" + hashPrefix + path(name, params);
+                    return "#" + hashPrefix + url;
                 }
             };
         }

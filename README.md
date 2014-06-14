@@ -10,8 +10,8 @@ basically:
 1. Give each route a name that is meaningful to your application, e.g.
 
     ```
-    $routeProvider.when("/product/:id", {
-        name: "product",
+    $routeProvider.when("/product/:id/stock/:store", {
+        name: "product:stock",
         ... usual stuff ...
     });
     ```
@@ -21,5 +21,16 @@ basically:
 3. Reference pages by name, together with any params needed to build the URL, e.g.
 
     ```
-    <a href="{{ urls.href('product', {id: 1}) }}">Product 1</a>
+    <a href="{{ urls.href('product:stock', {id: 1, store: 'Leeds'}) }}">
+        Product 1, Leeds
+    </a>
+    ```
+
+In the case where each named group in a route URL has a unique name and the
+order of the named groups is well known, paths can also be constructed by
+passing replacement values as positional args instead of a {name: value} map,
+e.g.
+
+    ```
+    <a href="{{ urls.href('product:stock', 1, 'Leeds') }}">Product 1, Leeds</a>
     ```
