@@ -27,7 +27,10 @@ angular.module("routeUrls", ["ngRoute"])
                 var path = (pathsByName[name] || "/").split("/");
                 for (var i=0, idx=0; i<path.length; i++) {
                     if (path[i] && path[i][0] === ":") {
-                        path[i] = isObject ? params[path[i].substring(1)] : params[idx++];
+                        value = isObject ? params[path[i].substring(1)] : params[idx++];
+                        if (value) {
+                            path[i] = value;
+                        }
                     }
                 }
                 return path.join("/");

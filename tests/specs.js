@@ -42,6 +42,13 @@ describe("urls service", function() {
         expect(urls.path("product", "xyz", "some", "more")).toBe("/product/xyz");
     });
 
+    it("retains group names for missing params", function() {
+        expect(urls.path("product:stock", {product: "xyz"})).toBe("/product/xyz/store/:store");
+        expect(urls.path("product:stock")).toBe("/product/:product/store/:store");
+        expect(urls.path("product:stock", "xyz")).toBe("/product/xyz/store/:store");
+        expect(urls.path("product:stock")).toBe("/product/:product/store/:store");
+    });
+
     it("handles replacement value containing group name prefix", function() {
         expect(urls.path("product:stock", "a:b", "c:d")).toBe("/product/a:b/store/c:d");
     });
