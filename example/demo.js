@@ -1,4 +1,4 @@
-var m = angular.module("Demo", ["routeUrls"]);
+var m = angular.module("Demo", ["ngRoute", "routeUrls"]);
 
 m.config(function($routeProvider) {
     $routeProvider.when("/", {
