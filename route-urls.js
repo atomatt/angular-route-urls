@@ -1,4 +1,4 @@
-angular.module("routeUrls", [])
+angular.module("routeUrls", ["ngRoute"])
 
 .provider("urls", function($locationProvider) {
 
