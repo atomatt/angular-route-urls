@@ -2,14 +2,6 @@ angular.module("routeUrls", ["ngRoute"])
 
 .provider("urls", function($locationProvider) {
 
-    // Create a regex to match a named group in a route URL.
-    var makeNamedGroupRegex = function(inner) {
-        return new RegExp(":" + inner + "(?=/|$)");
-    };
-
-    // Regex that matches any named group.
-    var anyNamedGroup = makeNamedGroupRegex(".*?");
-
     return {
         $get: function($route) {
 
@@ -21,28 +13,24 @@ angular.module("routeUrls", ["ngRoute"])
                 }
             });
 
-            // Param name to replacement regex cache.
-            var regexs = {};
-
             // Build a path for the named route from the route's URL and the given
             // params.
             var path = function (name, params) {
-                var url = pathsByName[name] || "/";
-                if (angular.isObject(params)) {
-                    angular.forEach(params || {}, function (value, key) {
-                        var regex = regexs[key];
-                        if (regex === undefined) {
-                            regex = regexs[key] = makeNamedGroupRegex(key);
-                        }
-                        url = url.replace(regex, value);
-                    });
-                } else {
+
+                // Accept an object or array of params.
+                var isObject = angular.isObject(params);
+                if (!isObject) {
                     params = Array.prototype.slice.call(arguments, 1);
-                    angular.forEach(params, function(param) {
-                        url = url.replace(anyNamedGroup, param);
-                    });
                 }
-                return url;
+
+                // Iterate the path segments replacing named groups.
+                var path = (pathsByName[name] || "/").split("/");
+                for (var i=0, idx=0; i<path.length; i++) {
+                    if (path[i] && path[i][0] === ":") {
+                        path[i] = isObject ? params[path[i].substring(1)] : params[idx++];
+                    }
+                }
+                return path.join("/");
             };
 
             // Query $locationProvider for its configuration.

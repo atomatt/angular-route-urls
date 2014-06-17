@@ -10,6 +10,9 @@ describe("urls service", function() {
             $routeProvider.when("/product/:product/store/:store", {
                 name: "product:stock"
             });
+            $routeProvider.when("/weird/:0!6&x/:$$", {
+                name: "weird"
+            });
         });
         inject(function(_urls_) {
             urls = _urls_;
@@ -37,5 +40,14 @@ describe("urls service", function() {
 
     it("ignores additional positional params", function() {
         expect(urls.path("product", "xyz", "some", "more")).toBe("/product/xyz");
+    });
+
+    it("handles replacement value containing group name prefix", function() {
+        expect(urls.path("product:stock", "a:b", "c:d")).toBe("/product/a:b/store/c:d");
+    });
+
+    it("replaces non-alpha params", function() {
+        expect(urls.path("weird", {"0!6&x": "xyz", "$$": "abc"})).toBe("/weird/xyz/abc");
+        expect(urls.path("weird", "xyz", "abc")).toBe("/weird/xyz/abc");
     });
 });
