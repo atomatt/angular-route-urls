@@ -44,7 +44,7 @@ angular.module("routeUrls", ["ngRoute"])
                 path: path,
                 href: function (name, params) {
                     var url = path.apply(this, arguments);
-                    if (html5Mode) {
+                    if (html5Mode === true || html5Mode.enabled === true) {
                         return url;
                     }
                     return "#" + hashPrefix + url;
